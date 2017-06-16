@@ -29,7 +29,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.markedImageView];
+    [self addButtomViewAction];
+    
+    //    [self.view addSubview:self.markedImageView];
     [self setupSwitcher];
     [self setupTestData];
     
@@ -82,7 +84,7 @@
 {
     if(!_markedImageView){
         UIImage *image = [UIImage imageNamed:@"cloud"];
-        _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH*image.size.height/image.size.width)];
+        _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH/2, SCREEN_WIDTH/2*image.size.height/image.size.width)];
         _markedImageView.y = (SCREEN_HEIGHT-STATUS_BAR_HEIGHT-NAVIGATION_BAR_HEIGHT-_markedImageView.height)/2;
         _markedImageView.image = image;
         _markedImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -168,4 +170,12 @@
     [self.tagBuilderView hide];
     [self showMarkedImageView];
 }
+
+#pragma mark --增加底部View--
+- (void)addButtomViewAction {
+    UIView *bttomView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT -  SCREEN_HEIGHT/4, SCREEN_WIDTH, SCREEN_HEIGHT/4)];
+    bttomView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:bttomView];
+}
+
 @end
