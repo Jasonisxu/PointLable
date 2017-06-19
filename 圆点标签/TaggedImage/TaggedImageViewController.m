@@ -22,7 +22,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.dataArray = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"a1"],[UIImage imageNamed:@"a2"],[UIImage imageNamed:@"a3"],[UIImage imageNamed:@"a4"],nil];
+    self.dataArray = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"a1"],[UIImage imageNamed:@"a2"],[UIImage imageNamed:@"a3"],[UIImage imageNamed:@"a4"],[UIImage imageNamed:@"a5"],[UIImage imageNamed:@"a6"],nil];
 
     [self addButtomViewAction];
     [self addcollectionViewAction];
@@ -36,7 +36,7 @@
 #pragma mark --增加底部View--
 - (void)addButtomViewAction {
     UIView *bttomView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT -  SCREEN_HEIGHT/4, SCREEN_WIDTH, SCREEN_HEIGHT/4)];
-    bttomView.backgroundColor = [UIColor blackColor];
+    bttomView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bttomView];
     
     UIButton *nextBt = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -74,9 +74,9 @@
     
     //2.初始化collectionView
     self.centerCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -  SCREEN_HEIGHT/4) collectionViewLayout:layout];
+    self.centerCollectionView.backgroundColor = [UIColor blackColor];
     self.centerCollectionView.pagingEnabled = YES;
     [self.view addSubview:self.centerCollectionView];
-    self.centerCollectionView.backgroundColor = [UIColor clearColor];
     
     //3.注册collectionViewCell
     //注意，此处的ReuseIdentifier 必须和 cellForItemAtIndexPath 方法中 一致 均为 cellId

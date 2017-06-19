@@ -33,8 +33,6 @@
     };
     
     [self.contentView addSubview:self.markedImageView];
-    NSLog(@"%@",_markedImageView);
-
 
     [self setupTestData];
 }
