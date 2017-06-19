@@ -22,7 +22,7 @@
     _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_HEIGHT / 4 * 3 - 100)*self.imagePhoto.size.width/self.imagePhoto.size.height, (SCREEN_HEIGHT / 4 * 3 - 100))];
     _markedImageView.center = self.contentView.center;
     _markedImageView.image = self.imagePhoto;
-    self.markedImageView.editable = NO;
+    self.markedImageView.editable = YES;
     __weak typeof(self) wself = self;
     //点击图片，编辑或新建标签
     _markedImageView.markedImageDidTapBlock = ^(TagViewModel *viewModel){
@@ -60,26 +60,6 @@
 
 #pragma mark - getter/setter
 
-//- (MarkedImageView *)markedImageView
-//{
-//    if(!_markedImageView){
-//        _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_HEIGHT / 4 * 3 - 100)*self.imagePhoto.size.width/self.imagePhoto.size.height, (SCREEN_HEIGHT / 4 * 3 - 100))];
-//        _markedImageView.center = self.contentView.center;
-//        _markedImageView.image = self.imagePhoto;
-//        NSLog(@"%@",self.imagePhoto);
-//        self.markedImageView.editable = NO;
-//        __weak typeof(self) wself = self;
-//        //点击图片，编辑或新建标签
-//        _markedImageView.markedImageDidTapBlock = ^(TagViewModel *viewModel){
-//            [wself showTagBuilderViewWithViewModel:viewModel];
-//        };
-//        _markedImageView.deleteTagViewBlock = ^(TagViewModel *viewModel){
-//            [wself handleDeleteTagViewWithViewModel:viewModel];
-//        };
-//    }
-//    return _markedImageView;
-//}
-
 - (TagBuilderView *)tagBuilderView
 {
     if(!_tagBuilderView){
@@ -104,7 +84,12 @@
 }
 - (void)showTagBuilderViewWithViewModel:(TagViewModel *)viewModel
 {
-    [self.contentView addSubview:self.tagBuilderView];
+    // 当前顶层窗口
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    // 添加到窗口
+    [window addSubview:self.tagBuilderView];
+//    [self.contentView addSubview:self.tagBuilderView];
+    
     [self.tagBuilderView setInfo:viewModel];
     [self.tagBuilderView show];
 }
