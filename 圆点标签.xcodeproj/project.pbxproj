@@ -28,6 +28,10 @@
 		965B88C51EF3B7D1000CE589 /* WWRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 965B88B81EF3B7D1000CE589 /* WWRouter.m */; };
 		965B88C61EF3B7D1000CE589 /* WWRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 965B88B91EF3B7D1000CE589 /* WWRouter.plist */; };
 		965B88C71EF3B7D1000CE589 /* UIView+WWView.m in Sources */ = {isa = PBXBuildFile; fileRef = 965B88C01EF3B7D1000CE589 /* UIView+WWView.m */; };
+		965B88CC1EF40005000CE589 /* TaggedCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965B88CA1EF40005000CE589 /* TaggedCollectionViewCell.m */; };
+		965B88CD1EF40005000CE589 /* TaggedCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 965B88CB1EF40005000CE589 /* TaggedCollectionViewCell.xib */; };
+		96B236381EF7D352000053F9 /* NextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B236361EF7D352000053F9 /* NextViewController.m */; };
+		96B236391EF7D352000053F9 /* NextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96B236371EF7D352000053F9 /* NextViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +76,12 @@
 		965B88C01EF3B7D1000CE589 /* UIView+WWView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WWView.m"; sourceTree = "<group>"; };
 		965B88C11EF3B7D1000CE589 /* WWUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWUIKit.h; sourceTree = "<group>"; };
 		965B88C81EF3B90B000CE589 /* CommonDemo-PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommonDemo-PrefixHeader.pch"; sourceTree = "<group>"; };
+		965B88C91EF40005000CE589 /* TaggedCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaggedCollectionViewCell.h; sourceTree = "<group>"; };
+		965B88CA1EF40005000CE589 /* TaggedCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaggedCollectionViewCell.m; sourceTree = "<group>"; };
+		965B88CB1EF40005000CE589 /* TaggedCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaggedCollectionViewCell.xib; sourceTree = "<group>"; };
+		96B236351EF7D352000053F9 /* NextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NextViewController.h; sourceTree = "<group>"; };
+		96B236361EF7D352000053F9 /* NextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NextViewController.m; sourceTree = "<group>"; };
+		96B236371EF7D352000053F9 /* NextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NextViewController.xib; sourceTree = "<group>"; };
 		9FC34FFB8B87C30DC476B7FB /* Pods-圆点标签.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-圆点标签.debug.xcconfig"; path = "Pods/Target Support Files/Pods-圆点标签/Pods-圆点标签.debug.xcconfig"; sourceTree = "<group>"; };
 		A077F303BC229F99F1B234DA /* libPods-圆点标签.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-圆点标签.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -99,6 +109,9 @@
 		965B886E1EF3B4CC000CE589 = {
 			isa = PBXGroup;
 			children = (
+				96B236351EF7D352000053F9 /* NextViewController.h */,
+				96B236361EF7D352000053F9 /* NextViewController.m */,
+				96B236371EF7D352000053F9 /* NextViewController.xib */,
 				965B88791EF3B4CC000CE589 /* 圆点标签 */,
 				965B88781EF3B4CC000CE589 /* Products */,
 				DA594ADA9E53A443F3BB9EAB /* Pods */,
@@ -148,6 +161,9 @@
 				965B88981EF3B52E000CE589 /* TaggedImageViewController.h */,
 				965B88991EF3B52E000CE589 /* TaggedImageViewController.m */,
 				965B889A1EF3B52E000CE589 /* View */,
+				965B88C91EF40005000CE589 /* TaggedCollectionViewCell.h */,
+				965B88CA1EF40005000CE589 /* TaggedCollectionViewCell.m */,
+				965B88CB1EF40005000CE589 /* TaggedCollectionViewCell.xib */,
 			);
 			path = TaggedImage;
 			sourceTree = "<group>";
@@ -338,6 +354,8 @@
 				965B888A1EF3B4CC000CE589 /* LaunchScreen.storyboard in Resources */,
 				965B88871EF3B4CC000CE589 /* Assets.xcassets in Resources */,
 				965B88851EF3B4CC000CE589 /* Main.storyboard in Resources */,
+				965B88CD1EF40005000CE589 /* TaggedCollectionViewCell.xib in Resources */,
+				96B236391EF7D352000053F9 /* NextViewController.xib in Resources */,
 				965B88A81EF3B52E000CE589 /* TagBuilderView.xib in Resources */,
 				965B88C61EF3B7D1000CE589 /* WWRouter.plist in Resources */,
 			);
@@ -408,8 +426,10 @@
 				965B88C51EF3B7D1000CE589 /* WWRouter.m in Sources */,
 				965B88A21EF3B52E000CE589 /* TagModel.m in Sources */,
 				965B88A91EF3B52E000CE589 /* TagView.m in Sources */,
+				965B88CC1EF40005000CE589 /* TaggedCollectionViewCell.m in Sources */,
 				965B88C21EF3B7D1000CE589 /* WWBaseAppDelegate.m in Sources */,
 				965B88C41EF3B7D1000CE589 /* WWBaseViewController.m in Sources */,
+				96B236381EF7D352000053F9 /* NextViewController.m in Sources */,
 				965B887C1EF3B4CC000CE589 /* main.m in Sources */,
 				965B88A31EF3B52E000CE589 /* TagViewModel.m in Sources */,
 			);

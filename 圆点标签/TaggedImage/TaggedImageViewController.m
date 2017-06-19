@@ -7,20 +7,12 @@
 //
 
 #import "TaggedImageViewController.h"
-#import "TagModel.h"
-#import "TagViewModel.h"
-#import "MarkedImageView.h"
-#import "TagBuilderView.h"
-#import "TagView.h"
+#import "TaggedCollectionViewCell.h"
+#import "NextViewController.h"
 
-@interface TaggedImageViewController ()<UIAlertViewDelegate>
-
-@property (nonatomic, strong) TagView *tagView;
-@property (nonatomic, strong) MarkedImageView *markedImageView;
-@property (nonatomic, strong) TagBuilderView *tagBuilderView;
-@property (nonatomic, strong) NSMutableArray<TagViewModel *> *viewModels;
-@property (nonatomic, assign) NSInteger deleteIndex;
-
+@interface TaggedImageViewController ()<UIAlertViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@property (nonatomic,strong) UICollectionView *centerCollectionView;
+@property (nonatomic,strong) NSMutableArray *dataArray;
 
 @end
 
@@ -29,12 +21,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.dataArray = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"a1"],[UIImage imageNamed:@"a2"],[UIImage imageNamed:@"a3"],[UIImage imageNamed:@"a4"],nil];
+
     [self addButtomViewAction];
-    
-    //    [self.view addSubview:self.markedImageView];
-    [self setupSwitcher];
-    [self setupTestData];
-    
+    [self addcollectionViewAction];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,140 +33,114 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setupSwitcher
-{
-    UISwitch *switcher = [[UISwitch alloc] init];
-    [switcher addTarget:self action:@selector(didSwitch:) forControlEvents:UIControlEventValueChanged];
-    self.navigationItem.titleView = switcher;
-}
-
-- (void)didSwitch:(UISwitch *)switcher
-{
-    if(switcher.on){
-        self.markedImageView.editable = YES;
-    }else{
-        self.markedImageView.editable = NO;
-    }
-}
-
-#pragma mark - test data
-- (void)setupTestData
-{
-    //test data
-    TagModel *model1 = [[TagModel alloc] initWithName:@"Mar" value:@"11"];
-    TagModel *model2 = [[TagModel alloc] initWithName:@"清晨" value:@"5:32"];
-    TagModel *model3 = [[TagModel alloc] initWithName:@"Tidus" value:@"@锡耶纳"];
-    TagViewModel *viewModel = [[TagViewModel alloc] initWithArray:@[model1, model2, model3].mutableCopy coordinate:CGPointMake(0.7, 0.5)];
-    
-    //test data
-    TagModel *model4 = [[TagModel alloc] initWithName:@"悬崖" value:@""];
-    TagModel *model5 = [[TagModel alloc] initWithName:@"欧洲" value:@"伊利奥斯"];
-    TagViewModel *viewModel1 = [[TagViewModel alloc] initWithArray:@[model4, model5].mutableCopy coordinate:CGPointMake(0.6, 0.75)];
-    viewModel1.style = TagViewStyleObliqueLeft;
-    
-    //data array
-    _viewModels = [[NSMutableArray alloc] initWithObjects:viewModel, viewModel1, nil];
-    
-    [self showMarkedImageView];
-}
-
-#pragma mark - getter/setter
-- (MarkedImageView *)markedImageView
-{
-    if(!_markedImageView){
-        UIImage *image = [UIImage imageNamed:@"cloud"];
-        _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH/2, SCREEN_WIDTH/2*image.size.height/image.size.width)];
-        _markedImageView.y = (SCREEN_HEIGHT-STATUS_BAR_HEIGHT-NAVIGATION_BAR_HEIGHT-_markedImageView.height)/2;
-        _markedImageView.image = image;
-        _markedImageView.contentMode = UIViewContentModeScaleAspectFill;
-        __weak typeof(self) wself = self;
-        //点击图片，编辑或新建标签
-        _markedImageView.markedImageDidTapBlock = ^(TagViewModel *viewModel){
-            [wself showTagBuilderViewWithViewModel:viewModel];
-        };
-        _markedImageView.deleteTagViewBlock = ^(TagViewModel *viewModel){
-            [wself handleDeleteTagViewWithViewModel:viewModel];
-        };
-    }
-    return _markedImageView;
-}
-
-- (TagBuilderView *)tagBuilderView
-{
-    if(!_tagBuilderView){
-        _tagBuilderView = [TagBuilderView viewFromNib];
-        _tagBuilderView.frame = self.markedImageView.frame;
-        _tagBuilderView.alpha = 0;
-        _tagBuilderView.backgroundImageView.image = self.markedImageView.blurImage;
-        //编辑、新建标签后返回viewModel，更新到现有数组
-        __weak typeof(self) wself = self;
-        _tagBuilderView.confirmBlock = ^(TagViewModel *viewModel){
-            [wself handleNewTagViewModel:viewModel];
-        };
-    }
-    return _tagBuilderView;
-}
-
-#pragma mark - private
-- (void)showMarkedImageView
-{
-    [self.markedImageView createTagView:self.viewModels];
-    [self.markedImageView showTagViews];
-}
-- (void)showTagBuilderViewWithViewModel:(TagViewModel *)viewModel
-{
-    [self.view addSubview:self.tagBuilderView];
-    [self.tagBuilderView setInfo:viewModel];
-    [self.tagBuilderView show];
-}
-
-- (void)handleDeleteTagViewWithViewModel:(TagViewModel *)viewModel
-{
-    self.deleteIndex = viewModel.index;
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"删除标签？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alertView.delegate = self;
-    [alertView show];
-}
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex) {
-        case 0: {
-            break;
-        }
-        case 1: {
-            if(self.deleteIndex == -1){
-                return;
-            }
-            [self.viewModels removeObjectAtIndex:self.deleteIndex];
-            [self showMarkedImageView];
-            self.deleteIndex = -1;
-            break;
-        }
-            
-        default:
-            break;
-    }
-}
-
-- (void)handleNewTagViewModel:(TagViewModel *)viewModel
-{
-    if(viewModel.index == -1){
-        viewModel.index = self.viewModels.count;
-        [self.viewModels addObject:viewModel];
-    }else{
-        [self.viewModels replaceObjectAtIndex:viewModel.index withObject:viewModel];
-    }
-    [self.tagBuilderView hide];
-    [self showMarkedImageView];
-}
-
 #pragma mark --增加底部View--
 - (void)addButtomViewAction {
     UIView *bttomView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT -  SCREEN_HEIGHT/4, SCREEN_WIDTH, SCREEN_HEIGHT/4)];
     bttomView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:bttomView];
+    
+    UIButton *nextBt = [UIButton buttonWithType:UIButtonTypeCustom];
+    nextBt.backgroundColor = [UIColor grayColor];
+    [nextBt setFrame:CGRectMake(0, 0, 100, 200)];
+    [bttomView addSubview:nextBt];
+    [nextBt addTarget:self action:@selector(nextControllerAction:) forControlEvents:UIControlEventTouchUpInside];
 }
+
+-(void)nextControllerAction:(id)sender {
+    [self.navigationController pushViewController:[NextViewController new] animated:YES];
+}
+
+#pragma mark 添加collectionView
+- (void)addcollectionViewAction {
+    /**
+     *
+     http://www.jianshu.com/p/16c9d466f88c
+     *
+     http://www.cocoachina.com/bbs/read.php?tid=327440&page=1#1411664
+     **/
+    
+    
+    /**
+     *http://www.cnblogs.com/leo-92/p/4311379.html
+     *iOS UICollectionView 缝隙修复
+     */
+    
+    //    NSLog(@"%f",SCREEN_WIDTH + pointX * 2);
+    
+    //1.初始化layout
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    //横向滑动
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    //2.初始化collectionView
+    self.centerCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -  SCREEN_HEIGHT/4) collectionViewLayout:layout];
+    self.centerCollectionView.pagingEnabled = YES;
+    [self.view addSubview:self.centerCollectionView];
+    self.centerCollectionView.backgroundColor = [UIColor clearColor];
+    
+    //3.注册collectionViewCell
+    //注意，此处的ReuseIdentifier 必须和 cellForItemAtIndexPath 方法中 一致 均为 cellId
+    [self.centerCollectionView registerNib:[UINib nibWithNibName:@"TaggedCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"TaggedCollectionViewCell"];
+    
+    //4.设置代理
+    self.centerCollectionView.delegate = self;
+    self.centerCollectionView.dataSource = self;
+    
+}
+
+#pragma mark collectionView代理方法
+//每个section的item个数
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.dataArray.count;
+}
+//设置每个item的尺寸
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4 * 3 - 100);
+}
+
+//设置每个item的UIEdgeInsets
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(50, 0, 0, 0);
+}
+
+//设置每个item水平间距
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0;
+}
+
+
+//设置每个item垂直间距
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static  NSString *TaggedID=@"TaggedCollectionViewCell";
+    TaggedCollectionViewCell *cell = (TaggedCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:TaggedID forIndexPath:indexPath];
+    
+    //cell重用的话会导致试图叠加
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    UIImage *image = self.dataArray[indexPath.row];
+    [cell cellAddTaggedViewAction:image];
+    
+    return cell;
+}
+
+
+//点击item方法
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"row:%li",indexPath.row);
+}
+
 
 @end
