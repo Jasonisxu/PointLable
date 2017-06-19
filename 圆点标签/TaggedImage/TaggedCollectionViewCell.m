@@ -19,20 +19,9 @@
     
     self.imagePhoto = image;
     
-    _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_HEIGHT / 4 * 3 - 100)*self.imagePhoto.size.width/self.imagePhoto.size.height, (SCREEN_HEIGHT / 4 * 3 - 100))];
-    _markedImageView.center = self.contentView.center;
-    _markedImageView.image = self.imagePhoto;
-    self.markedImageView.editable = YES;
-    __weak typeof(self) wself = self;
-    //点击图片，编辑或新建标签
-    _markedImageView.markedImageDidTapBlock = ^(TagViewModel *viewModel){
-        [wself showTagBuilderViewWithViewModel:viewModel];
-    };
-    _markedImageView.deleteTagViewBlock = ^(TagViewModel *viewModel){
-        [wself handleDeleteTagViewWithViewModel:viewModel];
-    };
+    [self addMarkedImageViewAction:image];
     
-    [self.contentView addSubview:self.markedImageView];
+    [self addTagBuilderViewAction];
 
     [self setupTestData];
 }
@@ -58,22 +47,34 @@
     [self showMarkedImageView];
 }
 
-#pragma mark - getter/setter
+- (void)addMarkedImageViewAction:(UIImage *)image{
+    _markedImageView = [[MarkedImageView alloc] initWithFrame:CGRectMake(0, 0, (SCREEN_HEIGHT / 4 * 3 - 100)*self.imagePhoto.size.width/self.imagePhoto.size.height, (SCREEN_HEIGHT / 4 * 3 - 100))];
+    _markedImageView.center = self.contentView.center;
+    _markedImageView.image = self.imagePhoto;
+    self.markedImageView.editable = YES;
+    __weak typeof(self) wself = self;
+    //点击图片，编辑或新建标签
+    _markedImageView.markedImageDidTapBlock = ^(TagViewModel *viewModel){
+        [wself showTagBuilderViewWithViewModel:viewModel];
+    };
+    _markedImageView.deleteTagViewBlock = ^(TagViewModel *viewModel){
+        [wself handleDeleteTagViewWithViewModel:viewModel];
+    };
+    
+    [self.contentView addSubview:self.markedImageView];
+}
 
-- (TagBuilderView *)tagBuilderView
+- (void)addTagBuilderViewAction
 {
-    if(!_tagBuilderView){
-        _tagBuilderView = [TagBuilderView viewFromNib];
-        [_tagBuilderView setFrame:CGRectMake(0, 0, 320, 568)];
-        _tagBuilderView.alpha = 0;
-        _tagBuilderView.backgroundImageView.image = self.markedImageView.blurImage;
-        //编辑、新建标签后返回viewModel，更新到现有数组
-        __weak typeof(self) wself = self;
-        _tagBuilderView.confirmBlock = ^(TagViewModel *viewModel){
-            [wself handleNewTagViewModel:viewModel];
-        };
-    }
-    return _tagBuilderView;
+    _tagBuilderView = [TagBuilderView viewFromNib];
+    [_tagBuilderView setFrame:CGRectMake(0, 0, 320, 568)];
+    _tagBuilderView.alpha = 0;
+    _tagBuilderView.backgroundImageView.image = self.markedImageView.blurImage;
+    //编辑、新建标签后返回viewModel，更新到现有数组
+    __weak typeof(self) wself = self;
+    _tagBuilderView.confirmBlock = ^(TagViewModel *viewModel){
+        [wself handleNewTagViewModel:viewModel];
+    };
 }
 
 #pragma mark - private
@@ -135,4 +136,5 @@
     [self.tagBuilderView hide];
     [self showMarkedImageView];
 }
+
 @end
